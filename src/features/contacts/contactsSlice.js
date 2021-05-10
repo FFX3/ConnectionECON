@@ -3,17 +3,21 @@ import { createSlice } from '@reduxjs/toolkit'
 export const contactsSlice = createSlice({
     name: 'contacts',
     initialState:{
-        value: []
+        list: []
     },
     reducers: {
         addContact: (state, action) => {
-            state.value.push(action.payload)
+            if(action.payload.hasOwnProperty('id')){
+                console.log("WARNING the contact's ID will be overridden by the addContact reducer")
+            }
+            action.payload.id = state.list.length
+            state.list.push(action.payload)
         }
     }
 })
 export const { addContact } = contactsSlice.actions
 
-export const selectContacts = (state) => state.contacts.value
+export const selectContacts = (state) => state.contacts.list
 
 
 export default contactsSlice.reducer

@@ -1,26 +1,42 @@
 import React, { useEffect, useState } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
-import { addContact, selectContacts } from '../features/contacts/contactsSlice'
+import { useDispatch } from 'react-redux'
+import { addContact } from '../features/contacts/contactsSlice'
 
-export const AddContactForm = () =>{
+
+export const AddContactForm = () => {
+    
     //Redux
-    const contacts = useSelector(selectContacts)
     const dispatch = useDispatch()
     //React State
     const [contact, setContact] = useState({})
-    const [id, setId] = useState(0)
     const [fname, setFname] = useState('')
     const [lname, setLname] = useState('')
+    const [email, setEmail] = useState('')
     
+    const isNameFilledInFields = (contact) => {
+        if(contact['fname'] === ''){
+            return false
+        }
+        return true
+    }
     const submitFormOnClick = (e) => {
         e.preventDefault()
         if(Object.keys(contact).length === 0){
             console.log('contact is empty')
             return
         }
+        if(!isNameFilledInFields(contact)){
+            alert('Please fill in all required fields')
+            return
+        }
         dispatch(addContact(contact))
+        resetForm()
+    }
+
+    const resetForm = () => {
         setFname('')
         setLname('')
+        setEmail('')
         setContact({})
     }
 
@@ -31,21 +47,21 @@ export const AddContactForm = () =>{
     const updateLnameOnChange = (e) => {
         setLname(e.target.value)
     }
-    
-    useEffect(()=>{
-        setId(contacts.length)
-    },[contacts.length])
+
+    const updateEmailOnChange = (e) => {
+        setEmail(e.target.value)
+    }
 
     useEffect(()=>{
         let newContact = {}
-        newContact.id = id
         newContact.fname = fname
         newContact.lname = lname
+        newContact.email = email
         setContact(newContact)
     },[
-        id,
         fname,
         lname,
+        email,
     ])
 
     return (
@@ -61,6 +77,12 @@ export const AddContactForm = () =>{
                 value={lname}
                 placeholder="Last Name"
                 onChange={updateLnameOnChange}
+            ></input>
+            <input 
+                type="text"
+                value={email}
+                placeholder="Email"
+                onChange={updateEmailOnChange}
             ></input>
             <button
                 onClick={submitFormOnClick}
