@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { addContact } from '../features/contacts/contactsSlice'
 
@@ -12,25 +12,12 @@ export const AddContactForm = () => {
     const [fname, setFname] = useState('')
     const [lname, setLname] = useState('')
     const [email, setEmail] = useState('')
-    
-    const isNameFilledInFields = (contact) => {
-        if(contact['fname'] === ''){
-            return false
-        }
-        return true
-    }
+
     const submitFormOnClick = (e) => {
         e.preventDefault()
-        if(Object.keys(contact).length === 0){
-            console.log('contact is empty')
-            return
-        }
-        if(!isNameFilledInFields(contact)){
-            alert('Please fill in all required fields')
-            return
-        }
         dispatch(addContact(contact))
         resetForm()
+        updateNewContact()
     }
 
     const resetForm = () => {
@@ -52,7 +39,7 @@ export const AddContactForm = () => {
         setEmail(e.target.value)
     }
 
-    useEffect(()=>{
+    const updateNewContact = useCallback(() => {
         let newContact = {}
         newContact.fname = fname
         newContact.lname = lname
@@ -62,6 +49,13 @@ export const AddContactForm = () => {
         fname,
         lname,
         email,
+    ])
+
+
+    useEffect(()=>{
+        updateNewContact()
+    },[
+        updateNewContact,
     ])
 
     return (
