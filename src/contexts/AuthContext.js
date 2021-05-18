@@ -19,10 +19,20 @@ export const AuthProvider = ({ children }) => {
         return auth.signInWithEmailAndPassword(email, password)
     }
 
+    const logout = () => {
+        auth.signOut()
+    }
+
+    const resetPassword = (email) => {
+        return auth.sendPasswordResetEmail(email)
+    }
+
     const value = {
         currentUser,
         signup,
         login,
+        logout,
+        resetPassword,
     }
     
     useEffect(()=>{
