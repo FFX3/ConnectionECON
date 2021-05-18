@@ -81,7 +81,7 @@ export const AddContactForm = () => {
             <button
                 onClick={submitFormOnClick}
             >
-            Add empty contact
+                Add contact
             </button>
         </div>
     )
