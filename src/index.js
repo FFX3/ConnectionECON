@@ -4,6 +4,7 @@ import App from './App';
 import { store } from './app/store';
 import { Provider } from 'react-redux';
 import { AuthProvider } from './contexts/AuthContext'
+import { DatabaseProvider } from './contexts/DatabaseContext'
 import * as serviceWorker from './serviceWorker';
 //CSS
 import 'bootstrap/dist/css/bootstrap.min.css'
@@ -13,7 +14,9 @@ ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
       <AuthProvider>
-        <App />
+        <DatabaseProvider>
+          <App />
+        </DatabaseProvider>
       </AuthProvider>
     </Provider>
   </React.StrictMode>,

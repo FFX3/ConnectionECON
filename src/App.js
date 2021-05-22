@@ -1,7 +1,9 @@
 import React from 'react'
 import { SignUp } from './components/SignUp'
 import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom'
+//context
 import { useAuth } from './contexts/AuthContext'
+import { useDatabase } from './contexts/DatabaseContext'
 //components
 import { Dashboard } from './components/Dashboard'
 import { Login } from './components/Login'
@@ -11,7 +13,12 @@ import { ForgotPassword } from './components/ForgotPassord'
 import './App.css'
 
 const App = () => {
+
+  //firebase stuff
   const { currentUser } = useAuth()
+  const { data } = useDatabase()
+
+  console.log(data)
 
   return (
     <div className="App">
