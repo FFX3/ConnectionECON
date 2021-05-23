@@ -1,5 +1,6 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext } from 'react'
 import { database } from '../firebase'
+import { useAuth } from '../contexts/AuthContext'
 
 const DatabaseContext = React.createContext()
 
@@ -8,20 +9,23 @@ export const useDatabase = () => {
 }
 
 export const DatabaseProvider = ({ children }) => {
-    const [data, setData] = useState()
+    const { uid } = useAuth()
 
-    let emailListRef = database.ref('emailLists')
-
-    const value = {
-        data,
+    const data = () => {
+        if(uid){
+            return database.ref(`users/${uid()}`).get()
+        }
+        return null
     }
 
-    useEffect(()=>{
-        emailListRef.on('value', (snapshot) => {
-            setData(snapshot.val())
-        })
-    },[])
-
+    const justinsData = () => {
+        return database.ref(`users/bxBFOUeyE4RhYBlu3D4U1NJ97M42`).get()
+    }
+    
+    const value = {
+        data,
+        justinsData,
+    }
     return (
         <DatabaseContext.Provider value={value}>
             {children}

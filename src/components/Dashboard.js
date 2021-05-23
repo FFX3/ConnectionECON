@@ -3,12 +3,28 @@ import { Card, Button, Alert } from 'react-bootstrap'
 import { AddContactForm } from './AddContactForm'
 import { ContactListDisplay } from './ContactListDisplay'
 import { useAuth } from '../contexts/AuthContext'
+import { useDatabase } from '../contexts/DatabaseContext'
 import { Link, useHistory } from 'react-router-dom'
 
 export const Dashboard = () => {
 
     const [error, setError] = useState('')
-    const { currentUser, logout } = useAuth()
+    const { currentUser, logout, uid } = useAuth()
+
+    const { data, justinsData } = useDatabase()
+
+    if(currentUser){
+        console.log(uid())
+
+        data().then(DataSnapshot => {
+            console.log(DataSnapshot.val())
+        })
+    
+        justinsData().then(DataSnapshot => {
+            console.log(DataSnapshot.val())
+        })
+    }
+    
     const history = useHistory()
 
     const handleLogout = () => {
@@ -28,7 +44,7 @@ export const Dashboard = () => {
                 <Card.Body>
                     <h2 className="test-center mb-4">Profile</h2>
                     {error && <Alert variant="danger">{error}</Alert>}
-                    <strong>Email: </strong> {currentUser.email}
+                    <strong>Email: </strong> {currentUser && currentUser.email}
                     <Link to="/update-profile" className="btn btn-primary w-100 mt-3">
                         Update Profile
                     </Link>

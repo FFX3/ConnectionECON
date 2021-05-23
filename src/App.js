@@ -3,7 +3,6 @@ import { SignUp } from './components/SignUp'
 import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom'
 //context
 import { useAuth } from './contexts/AuthContext'
-import { useDatabase } from './contexts/DatabaseContext'
 //components
 import { Dashboard } from './components/Dashboard'
 import { Login } from './components/Login'
@@ -16,16 +15,13 @@ const App = () => {
 
   //firebase stuff
   const { currentUser } = useAuth()
-  const { data } = useDatabase()
-
-  console.log(data)
 
   return (
     <div className="App">
       <Router>
           <Switch>
             <Route exact path="/">
-              {currentUser === undefined ? <Redirect to="/login" /> : <Dashboard />}
+              {(currentUser === undefined) ? <Redirect to="/login" /> : <Dashboard />}
             </Route>
             <Route path="/signup" component={SignUp} />
             <Route path="/login" component={Login} />

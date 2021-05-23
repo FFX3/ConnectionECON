@@ -27,8 +27,16 @@ export const AuthProvider = ({ children }) => {
         return auth.sendPasswordResetEmail(email)
     }
 
+    const uid = () => {
+        if(auth.currentUser){
+            return auth.currentUser.uid
+        }
+        return null
+    }
+
     const value = {
         currentUser,
+        uid,
         signup,
         login,
         logout,
@@ -37,8 +45,8 @@ export const AuthProvider = ({ children }) => {
     
     useEffect(()=>{
         const unsubscribe = auth.onAuthStateChanged(user=>{
-            setLoading(false)
             setCurrentUser(user)
+            setLoading(false)
         })
         return unsubscribe
     },[])

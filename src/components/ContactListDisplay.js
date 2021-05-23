@@ -5,7 +5,6 @@ import { store } from '../app/store'
 export const ContactListDisplay = () => {
 
     const contactsList = useSelector(selectContacts)
-    console.log(contactsList)
     const contacts = contactsList.map((contact) => {
         if(contact !== null){
             let newContact = {...contact}
@@ -14,8 +13,6 @@ export const ContactListDisplay = () => {
         }
         return null
     })
-
-    console.log(contacts)
 
     return(
         <ul>
