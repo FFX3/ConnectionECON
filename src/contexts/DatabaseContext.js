@@ -18,13 +18,17 @@ export const DatabaseProvider = ({ children }) => {
         return null
     }
 
-    const justinsData = () => {
-        return database.ref(`users/bxBFOUeyE4RhYBlu3D4U1NJ97M42`).get()
+    const replaceContactStore = (newStore) => {
+        console.log(newStore)
+        if(uid){
+            return database.ref(`users/${uid()}/contacts_store`).set(newStore)
+        }
+        return null
     }
     
     const value = {
         data,
-        justinsData,
+        replaceContactStore,
     }
     return (
         <DatabaseContext.Provider value={value}>

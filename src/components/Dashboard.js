@@ -5,23 +5,23 @@ import { ContactListDisplay } from './ContactListDisplay'
 import { useAuth } from '../contexts/AuthContext'
 import { useDatabase } from '../contexts/DatabaseContext'
 import { Link, useHistory } from 'react-router-dom'
+//
+import { selectContactsStore } from '../features/contacts/contactsSlice'
+import { useSelector } from 'react-redux'
 
 export const Dashboard = () => {
 
     const [error, setError] = useState('')
     const { currentUser, logout, uid } = useAuth()
 
-    const { data, justinsData } = useDatabase()
+    const { data, replaceContactStore } = useDatabase()
+    const contactsStore = useSelector(selectContactsStore)
 
     if(currentUser){
         console.log(uid())
 
         data().then(DataSnapshot => {
-            console.log(DataSnapshot.val())
-        })
-    
-        justinsData().then(DataSnapshot => {
-            console.log(DataSnapshot.val())
+            console.log(DataSnapshot.val().formal)
         })
     }
     
@@ -38,8 +38,13 @@ export const Dashboard = () => {
         }
     }
 
+    const uploadStoreOnclick = () => {
+        replaceContactStore(contactsStore)
+    }
+
     return (
         <>
+            <Button onClick={uploadStoreOnclick}>Upload Store!</Button>
             <div className="w-100" style={{ maxWidth: "400px" }}>
                 <Card.Body>
                     <h2 className="test-center mb-4">Profile</h2>
