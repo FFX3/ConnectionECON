@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Card, Button, Alert } from 'react-bootstrap'
 import { AddContactForm } from './AddContactForm'
 import { ContactListDisplay } from './ContactListDisplay'
@@ -8,23 +8,40 @@ import { Link, useHistory } from 'react-router-dom'
 //
 import { selectContactsStore } from '../features/contacts/contactsSlice'
 import { useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
+import { replaceList } from '../features/contacts/contactsSlice'
 
 export const Dashboard = () => {
 
+    const dispatch = useDispatch()
+
     const [error, setError] = useState('')
+    const [needToDowloadData, setNeedToDowloadData] = useState(true)
+    //this next line is just for proof of concept, the logic will be move to contactsSlice.js
+    const [tempDownload, setTempDownload] = useState()
+
     const { currentUser, logout, uid } = useAuth()
 
-    const { data, replaceContactStore } = useDatabase()
+    const { replaceContactStore, downloadContactsList } = useDatabase()
     const contactsStore = useSelector(selectContactsStore)
 
-    if(currentUser){
-        console.log(uid())
-
-        data().then(DataSnapshot => {
-            console.log(DataSnapshot.val().formal)
-        })
-    }
     
+    useEffect(()=>{
+        if(currentUser){
+            console.log(uid())
+    
+            if(needToDowloadData){
+                downloadContactsList().then(DataSnapshot => {
+                    setTempDownload(DataSnapshot.val())
+                    dispatch(replaceList(DataSnapshot.val()))
+                    setNeedToDowloadData(false)
+                })
+            }
+        } 
+    },[currentUser])
+    
+    console.log(tempDownload)
+
     const history = useHistory()
 
     const handleLogout = () => {

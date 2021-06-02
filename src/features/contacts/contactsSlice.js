@@ -16,10 +16,13 @@ export const contactsSlice = createSlice({
         deleteContact: (state, action) => {
             //payload contains ID reference to the object that will be deleted
             state.list[action.payload] = null
+        },
+        replaceList: (state, action) => {
+            state.list = action.payload
         }
     }
 })
-export const { addContact, deleteContact } = contactsSlice.actions
+export const { addContact, deleteContact, replaceList } = contactsSlice.actions
 
 export const selectContacts = (state) => state.contacts.list
 export const selectContactsStore = (state) => state.contacts

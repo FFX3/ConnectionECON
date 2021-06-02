@@ -18,6 +18,13 @@ export const DatabaseProvider = ({ children }) => {
         return null
     }
 
+    const downloadContactsList = () => {
+        if(uid){
+            return database.ref(`users/${uid()}/contacts_store/list`).get()
+        }
+        return null
+    }
+
     const replaceContactStore = (newStore) => {
         console.log(newStore)
         if(uid){
@@ -29,6 +36,7 @@ export const DatabaseProvider = ({ children }) => {
     const value = {
         data,
         replaceContactStore,
+        downloadContactsList,
     }
     return (
         <DatabaseContext.Provider value={value}>
