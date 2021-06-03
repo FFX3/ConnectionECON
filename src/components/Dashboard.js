@@ -6,10 +6,10 @@ import { useAuth } from '../contexts/AuthContext'
 import { useDatabase } from '../contexts/DatabaseContext'
 import { Link, useHistory } from 'react-router-dom'
 //
-import { selectContactsStore } from '../features/contacts/contactsSlice'
+import { selectContacts, selectContactsStore } from '../features/contacts/contactsSlice'
 import { useSelector } from 'react-redux'
 import { useDispatch } from 'react-redux'
-import { replaceList } from '../features/contacts/contactsSlice'
+import { replaceList, removeContactsStagedForDeletion } from '../features/contacts/contactsSlice'
 
 export const Dashboard = () => {
 
@@ -39,8 +39,6 @@ export const Dashboard = () => {
             }
         } 
     },[currentUser])
-    
-    console.log(tempDownload)
 
     const history = useHistory()
 
@@ -56,8 +54,16 @@ export const Dashboard = () => {
     }
 
     const uploadStoreOnclick = () => {
-        replaceContactStore(contactsStore)
+        dispatch({type:'contacts/removeContactsStagedForDeletion'})
+        console.log(contactsStore)
     }
+
+    useEffect(()=>{
+        if(!needToDowloadData){
+            console.log(contactsStore)
+            replaceContactStore(contactsStore)
+        }
+    },[contactsStore, needToDowloadData])
 
     return (
         <>

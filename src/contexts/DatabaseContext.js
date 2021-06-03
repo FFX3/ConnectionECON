@@ -26,7 +26,6 @@ export const DatabaseProvider = ({ children }) => {
     }
 
     const replaceContactStore = (newStore) => {
-        console.log(newStore)
         if(uid){
             return database.ref(`users/${uid()}/contacts_store`).set(newStore)
         }

@@ -14,15 +14,35 @@ export const contactsSlice = createSlice({
             state.list.push(action.payload)
         },
         deleteContact: (state, action) => {
-            //payload contains ID reference to the object that will be deleted
-            state.list[action.payload] = null
+            //payload contains id reference to the object that will be deleted
+            state.list[action.payload].stagedForDeletion = true
+        },
+        undoDelete: (state, action) => {
+            state.list[action.payload].stagedForDeletion = false
         },
         replaceList: (state, action) => {
             state.list = action.payload
-        }
+            if(state.list === null){
+                state.list = []
+            }
+        },
+        removeContactsStagedForDeletion: (state) => {
+            console.log(state.list)
+            let newList = state.list.reduce((arr, currentContact)=>{
+                console.log(currentContact)
+                if(currentContact.stagedForDeletion !== true){
+                    console.log(currentContact)
+                    currentContact.id = arr.length
+                    arr.push(currentContact)
+                    return arr
+                }
+                return arr
+            },[])
+            state.list = newList
+        },
     }
 })
-export const { addContact, deleteContact, replaceList } = contactsSlice.actions
+export const { addContact, deleteContact, replaceList, removeContactsStagedForDeletion } = contactsSlice.actions
 
 export const selectContacts = (state) => state.contacts.list
 export const selectContactsStore = (state) => state.contacts
