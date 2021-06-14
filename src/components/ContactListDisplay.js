@@ -1,7 +1,8 @@
 import { useSelector } from 'react-redux'
-import { selectContacts, deleteContact } from '../features/contacts/contactsSlice'
+import { selectContacts, deleteContact, undoDeleteContact } from '../features/contacts/contactsSlice'
 import { store } from '../app/store'
 import { DeletedContactPlaceHolder } from './DeletedContactPlaceHolder'
+import { Card, Button, Row, Col, Table } from 'react-bootstrap'
 
 export const ContactListDisplay = () => {
 
@@ -14,37 +15,83 @@ export const ContactListDisplay = () => {
             if(contact !== null){
                 let newContact = {...contact}
                 newContact.deleteSelf = ()=>{store.dispatch(deleteContact(contact.id))}
+                newContact.unDeleteSelf = ()=>{store.dispatch(undoDeleteContact(contact.id))}
                 return newContact
             }
             return null
         })
     }
 
+    
+
     const generateListHtml = () => {
         let listArr = []
         if(contacts){
             contacts.map((contact, i) => {
-                if(contact.stagedForDeletion === true){
-                    listArr.push(
-                        <DeletedContactPlaceHolder key={contact.id} id={contact.id}/>
-                    )
+                let undoOrDeleteButton
+                if(contact.stagedForDeletion){
+                    undoOrDeleteButton = <Button variant="warning" onClick={contact.unDeleteSelf}>Undo Select For Deletetion</Button>
                 }else{
-                    listArr.push(
-                        <div key={contact.id}>
-                            <li>{`First name:${contact.fname}, Last Name: ${contact.lname}, Email: ${contact.email}`}</li>
-                            <button onClick={contact.deleteSelf}>Delete Contact</button>
-                        </div>
-                    )
+                    undoOrDeleteButton = <Button variant="primary" onClick={contact.deleteSelf}>Select Contact For Deletion</Button>
                 }
+                    listArr.push(
+                        <Card 
+                            key={contact.id}
+                            style={{ margin: '15px auto 15px auto', width: "95%"}}
+                        >
+                            <Row>
+                                <Col xs="12" md="8">
+                                    <Table striped bordered hover size="sm" style={{ margin: '15px'}}>
+                                        <tbody>
+                                            <tr>
+                                                <td style={{ width: "1px", whiteSpace: "nowrap"}}>
+                                                    {`First name:`}
+                                                </td>
+                                                <td>
+                                                    {contact.fname}
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style={{ maxWidth: "40px"}}>
+                                                    {`Last name:`}
+                                                </td>
+                                                <td>
+                                                    {contact.lname}
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style={{ maxWidth: "40px"}}>
+                                                    {`Email:`}
+                                                </td>
+                                                <td>
+                                                    {contact.email}
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </Table>
+                                </Col>
+                                <Col>
+                                    <div style={{ alignItems: "center", justifyContent: "center", display: "flex", height: "100%"}}>
+                                        <div>
+                                            {undoOrDeleteButton}
+                                        </div>
+                                    </div>
+                                </Col>
+                            </Row>
+                        </Card>
+                    )
+                // }
             })}
         return listArr
     }
 
     return(
-        <ul>
-            {
-                generateListHtml()
-            }
-        </ul>
+        <>
+            <Row>
+                {
+                    generateListHtml()
+                }
+            </Row>
+        </>
     )
 }

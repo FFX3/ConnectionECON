@@ -17,7 +17,7 @@ export const contactsSlice = createSlice({
             //payload contains id reference to the object that will be deleted
             state.list[action.payload].stagedForDeletion = true
         },
-        undoDelete: (state, action) => {
+        undoDeleteContact: (state, action) => {
             state.list[action.payload].stagedForDeletion = false
         },
         replaceList: (state, action) => {
@@ -42,7 +42,7 @@ export const contactsSlice = createSlice({
         },
     }
 })
-export const { addContact, deleteContact, replaceList, removeContactsStagedForDeletion } = contactsSlice.actions
+export const { addContact, deleteContact, undoDeleteContact, replaceList, removeContactsStagedForDeletion } = contactsSlice.actions
 
 export const selectContacts = (state) => state.contacts.list
 export const selectContactsStore = (state) => state.contacts

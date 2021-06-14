@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { addContact } from '../features/contacts/contactsSlice'
+import { Form, Button, Card, Row, Col } from 'react-bootstrap'
 
 
 export const AddContactForm = () => {
@@ -14,6 +15,7 @@ export const AddContactForm = () => {
     const [email, setEmail] = useState('')
 
     const submitFormOnClick = (e) => {
+        console.log(e.target)
         e.preventDefault()
         dispatch(addContact(contact))
         resetForm()
@@ -59,30 +61,44 @@ export const AddContactForm = () => {
     ])
 
     return (
-        <div>
-            <input 
-                type="text"
-                value={fname}
-                placeholder="First Name"
-                onChange={updateFnameOnChange}
-            ></input>
-            <input 
-                type="text"
-                value={lname}
-                placeholder="Last Name"
-                onChange={updateLnameOnChange}
-            ></input>
-            <input 
-                type="text"
-                value={email}
-                placeholder="Email"
-                onChange={updateEmailOnChange}
-            ></input>
-            <button
-                onClick={submitFormOnClick}
+            <Form 
+                onSubmit={submitFormOnClick}
+                style={{ margin: "20px"}}
             >
-                Add contact
-            </button>
-        </div>
+                <Row>
+                    <Col xs="12" md="3">
+                        <Form.Control
+                            type="text"
+                            value={fname}
+                            placeholder="First Name"
+                            onChange={updateFnameOnChange}
+                        ></Form.Control>
+                    </Col>
+                    <Col xs="12" md="3">
+                        <Form.Control
+                            type="text"
+                            value={lname}
+                            placeholder="Last Name"
+                            onChange={updateLnameOnChange}
+                        ></Form.Control>
+                    </Col>
+                    <Col xs="12" md="3">
+                        <Form.Control
+                            type="text"
+                            value={email}
+                            placeholder="Email"
+                            onChange={updateEmailOnChange}
+                        ></Form.Control>
+                    </Col>
+                    <Col xs="12" md="3">
+                        <Button
+                            variant="success"
+                            type="submit"
+                        >
+                            Add contact
+                        </Button>
+                    </Col>
+                </Row>
+            </Form>
     )
 }
