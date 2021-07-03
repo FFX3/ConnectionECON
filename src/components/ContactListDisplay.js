@@ -1,7 +1,6 @@
 import { useSelector } from 'react-redux'
 import { selectContacts, deleteContact, undoDeleteContact } from '../features/contacts/contactsSlice'
 import { store } from '../app/store'
-import { DeletedContactPlaceHolder } from './DeletedContactPlaceHolder'
 import { Card, Button, Row, Col, Table } from 'react-bootstrap'
 
 export const ContactListDisplay = () => {
@@ -22,7 +21,17 @@ export const ContactListDisplay = () => {
         })
     }
 
-    
+    const toBeDeletedOverlayStyle = {
+        position: "absolute",
+        backgroundColor: "grey",
+        opacity: "50%",
+        top: "0px",
+        left: "0px",
+        width: "100%",
+        height: "100%",
+        fontSize: "32px",
+        paddingTop: "24px",
+    }
 
     const generateListHtml = () => {
         let listArr = []
@@ -37,10 +46,10 @@ export const ContactListDisplay = () => {
                     listArr.push(
                         <Card 
                             key={contact.id}
-                            style={{ margin: '15px auto 15px auto', width: "95%"}}
+                            style={{ margin: '15px auto 15px auto', width: "95%",}}
                         >
                             <Row>
-                                <Col xs="12" md="8">
+                                <Col xs="12" md="8" style={{  position: "relative", overflow: "hidden", }}>
                                     <Table striped bordered hover size="sm" style={{ margin: '15px'}}>
                                         <tbody>
                                             <tr>
@@ -69,6 +78,7 @@ export const ContactListDisplay = () => {
                                             </tr>
                                         </tbody>
                                     </Table>
+                                    {contact.stagedForDeletion && <div class="to-be-deleted-overlay" style={toBeDeletedOverlayStyle}>Warning: This Contact Will Be Deleted!</div>}
                                 </Col>
                                 <Col>
                                     <div style={{ alignItems: "center", justifyContent: "center", display: "flex", height: "100%"}}>
