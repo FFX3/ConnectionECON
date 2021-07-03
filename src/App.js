@@ -21,7 +21,7 @@ const App = () => {
       <Router>
           <Switch>
             <Route exact path="/">
-              {(currentUser === undefined) ? <Redirect to="/login" /> : <Dashboard />}
+              {(currentUser !== undefined) ? <Redirect to="/login" /> : <Dashboard />}
             </Route>
             <Route path="/signup" component={SignUp} />
             <Route path="/login" component={Login} />
